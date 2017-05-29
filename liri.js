@@ -1,22 +1,25 @@
 
+var fs = require("fs");
 var keys = require("./keys.js");
 var request = require("request");
 var twitter = require("twitter");
 var spotify = require("spotify");
-var client = new twitter(keys.twitterKeys);
-var fs = require("fs");
+var user = new twitter(keys.twitterKeys);
 
 
-var nodeArgv = process.argv;
+
+var numArr = process.argv;
 var command = process.argv[2];
 
 var x = "";
 
-for (var i=3; i<nodeArgv.length; i++){
-  if(i>3 && i<nodeArgv.length){
-    x = x + "+" + nodeArgv[i];
-  } else{
-    x = x + nodeArgv[i];
+for (var i=3; i < numArr.length; i++){
+  if(i > 3 && i < numArr.length){
+    x = x + "+" + numArr[i];
+  } 
+  
+  else{
+    x = x + numArr[i];
   }
 }
 
@@ -30,7 +33,7 @@ switch(command){
     if(x){
       spotifySong(x);
     } else{
-      spotifySong("Fluorescent Adolescent");
+      spotifySong("The Sign by Ace of Base");
     }
   break;
 
@@ -47,14 +50,14 @@ switch(command){
   break;
 
   default:
-    console.log("{Please enter a command: my-tweets, spotify-this-song, movie-this, do-what-it-says}");
+    console.log("{Please enter any selection: my-tweets, spotify-this-song, movie-this, do-what-it-says}");
   break;
 }
 
 function showTweets(){
   
   var screenName = {screen_name: 'SeanAlmers'};
-  client.get('statuses/user_timeline', screenName, function(error, tweets, response){
+  user.get('statuses/user_timeline', screenName, function(error, tweets, response){
     if(!error){
       for(var i = 0; i<tweets.length; i++){
         var date = tweets[i].created_at;
@@ -93,8 +96,10 @@ function spotifySong(song){
         fs.appendFile('log.txt', songData.album.name);
         fs.appendFile('log.txt', "-----------------------");
       }
-    } else{
-      console.log('Error occurred.');
+    } 
+    
+    else{
+      console.log("Error occurred");
     }
   });
 }
